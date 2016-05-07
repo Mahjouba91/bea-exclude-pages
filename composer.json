@@ -1,0 +1,16 @@
+{
+  "name": "bea/bea-exclude-pages",
+  "description": "Allows to exclude any page from search engines, internal search and navigation admin menu",
+  "minimum-stability": "stable",
+  "license": "GPL-2.0",
+  "authors": [
+    {
+      "name": "BeAPI",
+      "email": "technique@beapi.fr"
+    }
+  ],
+  "type" : "wordpress-plugin",
+  "require" : {
+    "composer/installers" : "~1.0"
+  }
+}
