@@ -1,49 +1,74 @@
 <?php
 /*
- Plugin Name: BEA Exclude pages
- Version: 1.3
- Description: exclude page from page navigation
- Author: BE API
+ Plugin Name: BEA - Exclude Pages
+ Version: 1.3.0
+ Version Boilerplate: 2.1.2
+ Plugin URI: http://www.beapi.fr
+ Description: Your plugin description
+ Author: BE API Technical team
  Author URI: http://www.beapi.fr
- Domain Path: /languages
+ Domain Path: languages
  Text Domain: bea_exclude_page
+
+ ----
+
+ Copyright 2015 BE API Technical team (human@beapi.fr)
+
+ This program is free software; you can redistribute it and/or modify
+ it under the terms of the GNU General Public License as published by
+ the Free Software Foundation; either version 2 of the License, or
+ (at your option) any later version.
+
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU General Public License for more details.
+
+ You should have received a copy of the GNU General Public License
+ along with this program; if not, write to the Free Software
+ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
-// Don't load directly.
+// don't load directly
 if ( ! defined( 'ABSPATH' ) ) {
 	die( '-1' );
 }
 
-// Plugin constants.
-define( 'BEA_EP_VERSION', '1.2' );
-define( 'BEA_EP_OPTION', 'bea_ep_options' );
+// Plugin constants
+define( 'BEA_EP_VERSION', '1.3.0' );
+define( 'BEA_EP_MIN_PHP_VERSION', '5.4' );
 
-// Plugin URL and PATH.
+// Plugin URL and PATH
 define( 'BEA_EP_URL', plugin_dir_url( __FILE__ ) );
 define( 'BEA_EP_DIR', plugin_dir_path( __FILE__ ) );
 
-/**
- *  Function for easy load files.
- *
- * @param string $dir Path directory from root plugin dir.
- * @param array  $files list of fil to include.
- * @param string $prefix prefix.
- */
-function _bea_exclude_page_load_files( $dir, $files, $prefix = '' ) {
-	foreach ( $files as $file ) {
-		if ( is_file( $dir . $prefix . $file . '.php' ) ) {
-			require_once( $dir . $prefix . $file . '.php' );
-		}
-	}
+define( 'BEA_EP_OPTION', 'bea_ep_options' );
+define( 'BEA_EP_EXCLUDED_META', '_excluded_from_nav' );
+
+// Check PHP min version
+if ( version_compare( PHP_VERSION, BEA_EP_MIN_PHP_VERSION, '<' ) ) {
+	require_once( BEA_EP_DIR . 'compat.php' );
+	// possibly display a notice, trigger error
+	add_action( 'admin_init', array( 'BEA\EP\Compatibility', 'admin_init' ) );
+	// stop execution of this file
+	return;
 }
-
-_bea_exclude_page_load_files( BEA_EP_DIR . 'classes/', array( 'main' ) );
-
-add_action( 'plugins_loaded', 'init_bea_exlude_page_plugin' );
 /**
- * Plugin loaded
+ * Autoload all the things \o/
  */
-function init_bea_exlude_page_plugin() {
-	load_plugin_textdomain( 'bea_exclude_page', false, basename( dirname( __FILE__ ), '/' ) . '/languages' );
-	new BEA_EP_Main();
+require_once BEA_EP_DIR . 'autoload.php';
+
+add_action( 'plugins_loaded', 'init_bea_exclude_pages_plugin' );
+/**
+ * Init the plugin
+ */
+function init_bea_exclude_pages_plugin() {
+	// Client
+	\BEA\EP\Main::get_instance();
+
+	// Admin
+	if ( is_admin() ) {
+		\BEA\EP\Admin\Main::get_instance();
+	}
+
 }
