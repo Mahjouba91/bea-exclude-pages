@@ -75,14 +75,25 @@ class Main {
 		if ( empty($search) ) {
 			return false;
 		}
-		$options = self::get_excluded_pages_option();
-		if ( empty( $options ) ) {
+		$excluded_pages = self::get_excluded_pages_option();
+		if ( empty( $excluded_pages ) ) {
 			return false;
 		}
 
-		$query->set( 'post__not_in', $options );
-
+		$options = get_option( 'bea_ep_settings' );
+		if ( $options == false ) {
+			return false;
+		}
+		if ( ! isset( $options[BEA_EP_OPTION_SEARCH_EXCLUSION] ) ) {
+			return false;
+		}
+		$option_seo_exclusion = $options[BEA_EP_OPTION_SEARCH_EXCLUSION];
+		if ( $option_seo_exclusion != '1' ) {
+			return false;
+		}
+		$query->set( 'post__not_in', $excluded_pages );
 		return true;
+
 	}
 
 	/**
@@ -91,7 +102,20 @@ class Main {
 	 * @return string
 	 */
 	public function add_meta_robot_noindex() {
-		if ( self::is_excluded_page(get_queried_object_id() ) == true ) {
+		if ( self::is_excluded_page(get_queried_object_id() ) == false ) {
+			return;
+		}
+
+		$options = get_option( 'bea_ep_settings' );
+		if ( $options == false ) {
+			return;
+		}
+		if ( ! isset( $options[BEA_EP_OPTION_SEO_EXCLUSION] ) ) {
+			return;
+		}
+		$option_seo_exclusion = $options[BEA_EP_OPTION_SEO_EXCLUSION];
+
+		if ( $option_seo_exclusion == '1' ) {
 			echo '<meta name="robots" content="noindex, follow">';
 		}
 	}
