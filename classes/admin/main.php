@@ -59,14 +59,22 @@ class Main {
 	}
 
 	public function bea_ep_checkbox_seo_exclusion_render(  ) {
-		$options = get_option( 'bea_ep_settings' ); ?>
-		<input type='checkbox' id=<?php echo BEA_EP_OPTION_SEO_EXCLUSION ?> name='bea_ep_settings[<?php echo BEA_EP_OPTION_SEO_EXCLUSION ?>]' <?php checked( $options[BEA_EP_OPTION_SEO_EXCLUSION], 1 ); ?> value='1'>
+		$options = get_option( 'bea_ep_settings' );
+		if ( empty($options[BEA_EP_OPTION_SEO_EXCLUSION]) ) {
+			$options[BEA_EP_OPTION_SEO_EXCLUSION] = '0';
+		}
+		?>
+		<input type='checkbox' id="<?php echo BEA_EP_OPTION_SEO_EXCLUSION ?>" name='bea_ep_settings[<?php echo BEA_EP_OPTION_SEO_EXCLUSION ?>]' value='1' <?php checked( $options[BEA_EP_OPTION_SEO_EXCLUSION], '1' ); ?>>
 	<?php
 	}
 
 	public function bea_ep_checkbox_search_exclusion_render(  ) {
-		$options = get_option( 'bea_ep_settings' ); ?>
-		<input type='checkbox' id="<?php echo BEA_EP_OPTION_SEARCH_EXCLUSION ?>" name='bea_ep_settings[<?php echo BEA_EP_OPTION_SEARCH_EXCLUSION ?>]' <?php checked( $options[BEA_EP_OPTION_SEARCH_EXCLUSION], 1 ); ?> value='1'>
+		$options = get_option( 'bea_ep_settings' );
+		if ( empty($options[BEA_EP_OPTION_SEARCH_EXCLUSION]) ) {
+			$options[BEA_EP_OPTION_SEARCH_EXCLUSION] = '0';
+		}
+		?>
+		<input type='checkbox' id="<?php echo BEA_EP_OPTION_SEARCH_EXCLUSION ?>" name='bea_ep_settings[<?php echo BEA_EP_OPTION_SEARCH_EXCLUSION ?>]' value='1' <?php checked( $options[BEA_EP_OPTION_SEARCH_EXCLUSION], '1' ); ?>>
 	<?php
 	}
 
