@@ -15,12 +15,80 @@ class Main {
 	use Singleton;
 
 	public function init() {
-		add_action( 'add_meta_boxes', array( $this, 'add_meta_box' ) );
+		add_action( 'admin_menu', array( $this, 'add_admin_options_page' ) );
+		add_action( 'admin_init', array( $this, 'settings_init' ) );
+		add_action( 'add_meta_boxes', array( $this, 'add_meta_box_on_pages' ) );
 		add_action( 'save_post', array( $this, 'save_meta' ) );
 		add_action( 'pre_get_posts', array( $this, 'hide_excluded_pages_on_navmenu' ) );
 		add_filter( 'wp_list_pages_excludes', array( $this, 'filter_wp_list_pages_excludes' ), 10 );
 		add_action( 'before_delete_post', array( $this, 'delete_exclude_page' ) );
 	}
+
+	public function add_admin_options_page(  ) {
+		add_options_page( 'BEA Exclude Pages', 'BEA Exclude Pages', 'manage_options', 'bea_exclude_page_options', array( $this, 'bea_ep_options_page' ) );
+	}
+
+	public function settings_init(  ) {
+
+		register_setting( 'general_settings', 'bea_ep_settings' );
+
+		add_settings_section(
+			'bea_ep_general_settings_section',
+			__( 'General Options', 'bea_exclude_page' ),
+			array( $this, 'bea_ep_settings_section_callback' ),
+			'general_settings'
+		);
+
+		add_settings_field(
+			'bea_ep_checkbox_seo_exclusion',
+			__( 'Do you want to hide excluded pages from Search Engine results ?', 'bea_exclude_page' ),
+			array( $this, 'bea_ep_checkbox_seo_exclusion_render' ),
+			'general_settings',
+			'bea_ep_general_settings_section',
+			array( "label_for" => "bea_ep_checkbox_seo_exclusion" )
+		);
+
+		add_settings_field(
+			'bea_ep_checkbox_search_exclusion',
+			__( 'Do you want to hide excluded pages from search results of your website (frontend) ?', 'bea_exclude_page' ),
+			array( $this, 'bea_ep_checkbox_search_exclusion_render' ),
+			'general_settings',
+			'bea_ep_general_settings_section',
+			array( "label_for" => "bea_ep_checkbox_search_exclusion" )
+		);
+	}
+
+	public function bea_ep_checkbox_seo_exclusion_render(  ) {
+		$options = get_option( 'bea_ep_settings' ); ?>
+		<input type='checkbox' id="bea_ep_checkbox_seo_exclusion" name='bea_ep_settings[bea_ep_checkbox_seo_exclusion]' <?php checked( $options['bea_ep_checkbox_seo_exclusion'], 1 ); ?> value='1'>
+	<?php
+	}
+
+	public function bea_ep_checkbox_search_exclusion_render(  ) {
+		$options = get_option( 'bea_ep_settings' ); ?>
+		<input type='checkbox' id="bea_ep_checkbox_search_exclusion" name='bea_ep_settings[bea_ep_checkbox_search_exclusion]' <?php checked( $options['bea_ep_checkbox_search_exclusion'], 1 ); ?> value='1'>
+	<?php
+	}
+
+	public function bea_ep_settings_section_callback(  ) {
+		echo __( 'This section description', 'bea_exclude_page' );
+	}
+
+	public function bea_ep_options_page(  ) {
+		?>
+		<form action='options.php' method='post'>
+
+			<h2>BEA Exclude Pages</h2>
+
+			<?php
+			settings_fields( 'general_settings' );
+			do_settings_sections( 'general_settings' );
+			submit_button();
+			?>
+		</form>
+	<?php
+	}
+
 	/**
 	 * Add meta box on post type page
 	 *
@@ -29,7 +97,7 @@ class Main {
 	 * @return bool
 	 * @author Zainoudine Soulé
 	 */
-	public function add_meta_box( $post_type ) {
+	public function add_meta_box_on_pages( $post_type ) {
 		if ( 'page' !== $post_type ) {
 			return false;
 		}
