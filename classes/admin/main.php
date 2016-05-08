@@ -40,33 +40,33 @@ class Main {
 		);
 
 		add_settings_field(
-			'bea_ep_checkbox_seo_exclusion',
+			BEA_EP_OPTION_SEO_EXCLUSION,
 			__( 'Do you want to hide excluded pages from Search Engine results ?', 'bea_exclude_page' ),
 			array( $this, 'bea_ep_checkbox_seo_exclusion_render' ),
 			'general_settings',
 			'bea_ep_general_settings_section',
-			array( "label_for" => "bea_ep_checkbox_seo_exclusion" )
+			array( "label_for" => BEA_EP_OPTION_SEO_EXCLUSION )
 		);
 
 		add_settings_field(
-			'bea_ep_checkbox_search_exclusion',
+			BEA_EP_OPTION_SEARCH_EXCLUSION,
 			__( 'Do you want to hide excluded pages from search results of your website (frontend) ?', 'bea_exclude_page' ),
 			array( $this, 'bea_ep_checkbox_search_exclusion_render' ),
 			'general_settings',
 			'bea_ep_general_settings_section',
-			array( "label_for" => "bea_ep_checkbox_search_exclusion" )
+			array( "label_for" => BEA_EP_OPTION_SEARCH_EXCLUSION )
 		);
 	}
 
 	public function bea_ep_checkbox_seo_exclusion_render(  ) {
 		$options = get_option( 'bea_ep_settings' ); ?>
-		<input type='checkbox' id="bea_ep_checkbox_seo_exclusion" name='bea_ep_settings[bea_ep_checkbox_seo_exclusion]' <?php checked( $options['bea_ep_checkbox_seo_exclusion'], 1 ); ?> value='1'>
+		<input type='checkbox' id=<?php echo BEA_EP_OPTION_SEO_EXCLUSION ?> name='bea_ep_settings[<?php echo BEA_EP_OPTION_SEO_EXCLUSION ?>]' <?php checked( $options[BEA_EP_OPTION_SEO_EXCLUSION], 1 ); ?> value='1'>
 	<?php
 	}
 
 	public function bea_ep_checkbox_search_exclusion_render(  ) {
 		$options = get_option( 'bea_ep_settings' ); ?>
-		<input type='checkbox' id="bea_ep_checkbox_search_exclusion" name='bea_ep_settings[bea_ep_checkbox_search_exclusion]' <?php checked( $options['bea_ep_checkbox_search_exclusion'], 1 ); ?> value='1'>
+		<input type='checkbox' id="<?php echo BEA_EP_OPTION_SEARCH_EXCLUSION ?>" name='bea_ep_settings[<?php echo BEA_EP_OPTION_SEARCH_EXCLUSION ?>]' <?php checked( $options[BEA_EP_OPTION_SEARCH_EXCLUSION], 1 ); ?> value='1'>
 	<?php
 	}
 

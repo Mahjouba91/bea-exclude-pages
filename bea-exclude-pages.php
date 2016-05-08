@@ -43,6 +43,8 @@ define( 'BEA_EP_URL', plugin_dir_url( __FILE__ ) );
 define( 'BEA_EP_DIR', plugin_dir_path( __FILE__ ) );
 
 define( 'BEA_EP_OPTION', 'bea_ep_options' );
+define( 'BEA_EP_OPTION_SEO_EXCLUSION', 'bea_ep_checkbox_seo_exclusion' );
+define( 'BEA_EP_OPTION_SEARCH_EXCLUSION', 'bea_ep_checkbox_search_exclusion' );
 define( 'BEA_EP_EXCLUDED_META', '_excluded_from_nav' );
 
 // Check PHP min version
