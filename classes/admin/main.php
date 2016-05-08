@@ -341,7 +341,7 @@ class Main {
 	 *
 	 * @return bool
 	 */
-	public function has_ancestors_exclude( $page_id, $exclude_page = array() ) {
+	public static function has_ancestors_exclude( $page_id, $exclude_page = array() ) {
 		$ancestors = get_ancestors( $page_id, 'page' );
 
 		/**
