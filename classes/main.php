@@ -91,7 +91,7 @@ class Main {
 	 * @return string
 	 */
 	public function add_meta_robot_noindex() {
-		if ( bea_ep_is_excluded_page(get_queried_object_id() ) == true ) {
+		if ( self::is_excluded_page(get_queried_object_id() ) == true ) {
 			echo '<meta name="robots" content="noindex, follow">';
 		}
 	}
@@ -138,5 +138,24 @@ class Main {
 		return array_map( 'intval', $excluded_pages->posts );
 	}
 
+	/**
+	 * Check if a page is excluded
+	 *
+	 * @param int $page_id
+	 *
+	 * @return bool
+	 */
+	public static function is_excluded_page( $page_id = 0 ) {
+		$excluded_pages = \BEA\EP\Main::get_excluded_pages_option();
+		if ( empty( $excluded_pages ) ) {
+			return false;
+		}
+
+		if ( in_array( (int) $page_id, $excluded_pages ) ) {
+			return true;
+		}
+
+		return false;
+	}
 
 }
