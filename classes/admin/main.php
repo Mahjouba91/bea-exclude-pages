@@ -71,7 +71,7 @@ class Main {
 	}
 
 	public function bea_ep_settings_section_callback(  ) {
-		echo __( 'This section description', 'bea_exclude_page' );
+		echo '';
 	}
 
 	public function bea_ep_options_page(  ) {
